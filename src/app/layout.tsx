@@ -1,10 +1,11 @@
-import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { DocsSidebar } from "@/components/docs-sidebar"
-import { Separator } from "@/components/ui/separator"
+import { Inter } from 'next/font/google'
 import "./globals.css"
+import AuthProvider from '@/components/AuthProvider'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Fedpatools',
+  title: 'Flocktools',
   description: 'Herramienta centralizada para las necesidades de Flock IT',
 }
 
@@ -14,30 +15,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es" className={inter.className}>
       <body>
-        <SidebarProvider>
-          <DocsSidebar />
-          <SidebarInset className="min-h-screen">
-            <header className="flex h-14 items-center gap-4 border-b px-4">
-              <SidebarTrigger />
-              <Separator orientation="vertical" className="h-6" />
-              <div className="flex-1">
-                <nav className="flex items-center space-x-4 lg:space-x-6">
-                  <a
-                    href="/"
-                    className="text-sm font-medium transition-colors hover:text-primary"
-                  >
-                    Inicio
-                  </a>
-                </nav>
-              </div>
-            </header>
-            <main className="flex-1 space-y-4 p-4 md:p-8 pt-8">
-              {children}
-            </main>
-          </SidebarInset>
-        </SidebarProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   )

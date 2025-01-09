@@ -4,24 +4,24 @@ export default function IntroduccionPage() {
   return (
     <div className="fedpa-container space-y-6">
       <div className="space-y-2">
-        <h1 className="fedpa-title">Bienvenido a Fedpatools</h1>
+        <h1 className="fedpa-title">Bienvenido a Flocktools</h1>
         <p className="fedpa-text text-xl">
-          La herramienta centralizada para las necesidades de Flock IT en el proyecto de nuestro cliente.
+          La herramienta centralizada para las necesidades de Flock IT en los proyectos de nuestros clientes.
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card className="fedpa-card">
           <CardHeader>
-            <CardTitle className="text-primary">¿Qué es Fedpatools?</CardTitle>
+            <CardTitle className="text-primary">¿Qué es Flocktools?</CardTitle>
             <CardDescription className="text-muted-foreground">Una visión general de nuestra herramienta</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="fedpa-text">
-              Fedpatools es una plataforma integral diseñada para centralizar y optimizar todas las necesidades
-              de Flock IT dentro del proyecto de nuestro cliente. Nuestro objetivo principal es facilitar y
+              Flocktools es una plataforma integral diseñada para centralizar y optimizar todas las necesidades
+              de Flock IT en los proyectos de nuestros clientes. Nuestro objetivo principal es facilitar y
               agilizar las acciones del equipo, mejorando la eficiencia y la colaboración en todas las etapas
-              del proyecto.
+              de los proyectos.
             </p>
           </CardContent>
         </Card>
@@ -54,11 +54,11 @@ export default function IntroduccionPage() {
 
         <Card className="fedpa-card">
           <CardHeader>
-            <CardTitle className="text-primary">Explora Fedpatools</CardTitle>
+            <CardTitle className="text-primary">Explora Flocktools</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="fedpa-text">
-              Descubre cómo Fedpatools puede ayudarte en tu trabajo diario y mejorar la eficiencia general del proyecto.
+              Descubre cómo Flocktools puede ayudarte en tu trabajo diario y mejorar la eficiencia general de los proyectos.
               Explora las diferentes secciones para aprovechar al máximo esta herramienta.
             </p>
           </CardContent>

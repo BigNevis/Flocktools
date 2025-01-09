@@ -83,3 +83,38 @@
     @apply bg-input text-primary border-border;
   }
 }
+
+.cmdk-item {
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+.cmdk-item:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.cmdk-item[aria-selected="true"] {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+[cmdk-list] {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.w-tc-editor {
+  background-color: #1e1e1e !important;
+}
+
+.w-tc-editor-text,
+.w-tc-editor-var,
+.w-tc-editor-number,
+.w-tc-editor-type,
+.w-tc-editor-builtin,
+.w-tc-editor-string,
+.w-tc-editor-keyword {
+  color: white !important;
+}
