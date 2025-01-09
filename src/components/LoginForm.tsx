@@ -56,9 +56,27 @@ const LoginForm = () => {
     try {
       const result = await instance.loginPopup(loginRequest)
       if (result) {
-        console.log('Microsoft login successful:', result)
-        localStorage.setItem('msalAccount', JSON.stringify(result.account))
-        router.push('/dashboard')
+        console.log('Microsoft login result:', result)
+        const response = await fetch('http://localhost:3004/api/auth/microsoft-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            accessToken: result.accessToken,
+            idToken: result.idToken,
+            account: result.account
+          }),
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('user', JSON.stringify(data.user))
+          router.push('/dashboard')
+        } else {
+          const errorData = await response.json()
+          console.error('Error response:', errorData)
+          setError(errorData.error || 'Error al iniciar sesión con Microsoft')
+        }
       }
     } catch (error) {
       console.error('Error durante el inicio de sesión con Microsoft:', error)
