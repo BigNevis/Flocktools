@@ -1,49 +1,69 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useMsal } from '@azure/msal-react'
+import { loginRequest } from '@/config/authConfig'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
-export default function LoginForm() {
+const LoginForm = () => {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { instance } = useMsal()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
     try {
       const response = await fetch('http://localhost:3004/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
 
-      const data = await response.json()
-
       if (response.ok) {
+        const data = await response.json()
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
         router.push('/dashboard')
       } else {
-        setError(data.message || 'Error al iniciar sesión')
+        const errorData = await response.json()
+        setError(errorData.message || 'Credenciales inválidas')
       }
     } catch (error) {
-      setError('Error de conexión')
+      console.error('Error durante el inicio de sesión:', error)
+      setError('Error al iniciar sesión. Por favor, intente de nuevo.')
     }
+
+    setIsLoading(false)
   }
 
-  const handleGuestAccess = () => {
+  const handleGuestLogin = () => {
     localStorage.setItem('user', JSON.stringify({ rol: 'invitado' }))
     router.push('/dashboard')
+  }
+
+  const handleMicrosoftLogin = async () => {
+    try {
+      const result = await instance.loginPopup(loginRequest)
+      if (result) {
+        console.log('Microsoft login successful:', result)
+        localStorage.setItem('msalAccount', JSON.stringify(result.account))
+        router.push('/dashboard')
+      }
+    } catch (error) {
+      console.error('Error durante el inicio de sesión con Microsoft:', error)
+      setError('Error al iniciar sesión con Microsoft. Por favor, intente de nuevo.')
+    }
   }
 
   return (
@@ -55,9 +75,9 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
+            <Input
+              id="email"
+              type="email"
               placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -67,8 +87,8 @@ export default function LoginForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Contraseña</Label>
-            <Input 
-              id="password" 
+            <Input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -81,17 +101,24 @@ export default function LoginForm() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full fedpa-button">
-            Iniciar sesión
+          <Button type="submit" disabled={isLoading} className="w-full fedpa-button">
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </Button>
         </form>
         <div className="mt-4">
-          <Button onClick={handleGuestAccess} variant="outline" className="w-full">
+          <Button onClick={handleGuestLogin} variant="outline" className="w-full">
             Entrar como invitado
+          </Button>
+        </div>
+        <div className="mt-4">
+          <Button onClick={handleMicrosoftLogin} variant="outline" className="w-full">
+            Iniciar sesión con Microsoft
           </Button>
         </div>
       </CardContent>
     </Card>
   )
 }
+
+export default LoginForm
 
